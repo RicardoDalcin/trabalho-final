@@ -1,0 +1,26 @@
+{
+    "tasks": [
+      {
+        "type": "cppbuild",
+        "label": "build_project",
+        "command": "g++",
+        "args": [
+          "-g",
+          "${workspaceFolder}\\include\\parser.hpp",
+          "${workspaceFolder}\\src\\main.cpp",
+          "-o",
+          "${workspaceFolder}\\bin\\app.exe"
+        ],
+        "options": {
+          "cwd": "${fileDirname}"
+        },
+        "problemMatcher": ["$gcc"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "detail": "compiler: D:/ProgramFiles/MingW/bin/g++.exe"
+      }
+    ],
+    "version": "2.0.0"
+  }
