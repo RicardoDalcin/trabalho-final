@@ -12,6 +12,19 @@
 - [ ] Criar pesquisa "top&lt;N&gt;"
 - [ ] Criar pesquisa "tags"
 
+### Estruturas de Dados
+
+- Hash table para armazenamento dos players (id, nome, posições, etc.)
+- Árvore Trie para armazenamento do nome e id dos jogadores
+- Hash table para armazenamento das classificações por usuário
+- Hash table para armazenamento da lista de jogadores com cada tag
+
+### Ordem para construção
+
+1. Carrega players na hash table (junto já cria a árvore trie)
+2. Carrega as classificações por usuário (junto já atualiza as médias globais por jogador)
+3. Carrega as tags por jogador
+
 ### Pontos principais
 
 - Fase 1:
