@@ -6,7 +6,7 @@
 
 using namespace std;
 
-template <typename T, typename TKey>
+template <class T, typename TKey>
 struct entry
 {
   TKey id;
@@ -14,42 +14,41 @@ struct entry
   struct entry<T, TKey> *nextEntry;
 };
 
-template <typename T, typename TKey>
+template <class T, typename TKey>
 class HashTable
 {
 private:
   int size;
-  entry<T, TKey> *createEntry(TKey key, T *values);
+  entry<T, TKey> *createEntry(TKey key, T values);
   entry<T, TKey> **hashTable;
 
 public:
   int hashFunction(TKey key);
-  void insertItem(TKey key, T *values);
+  void insertItem(TKey key, T values);
   T searchItem(TKey key);
   HashTable(int tableSize);
 };
 
-template <typename T, typename TKey>
+template <class T, typename TKey>
 HashTable<T, TKey>::HashTable(int tableSize)
 {
   size = tableSize;
   hashTable = (entry<T, TKey> **)calloc(size, sizeof(entry<T, TKey> *));
 }
 
-template <typename T, typename TKey>
-entry<T, TKey> *HashTable<T, TKey>::createEntry(TKey key, T *values)
+template <class T, typename TKey>
+entry<T, TKey> *HashTable<T, TKey>::createEntry(TKey key, T values)
 {
   entry<T, TKey> *newNode = new entry<T, TKey>;
 
   newNode->id = key;
   newNode->nextEntry = NULL;
-
-  memcpy(&newNode->value, values, sizeof(T));
+  newNode->value = values;
 
   return newNode;
 }
 
-template <typename T, typename TKey>
+template <class T, typename TKey>
 int HashTable<T, TKey>::hashFunction(TKey key)
 {
   unsigned long longHash = 5381;
@@ -65,8 +64,8 @@ int HashTable<T, TKey>::hashFunction(TKey key)
   return hash;
 }
 
-template <typename T, typename TKey>
-void HashTable<T, TKey>::insertItem(TKey key, T *values)
+template <class T, typename TKey>
+void HashTable<T, TKey>::insertItem(TKey key, T values)
 {
   int hashKey = hashFunction(key);
 
@@ -89,24 +88,24 @@ void HashTable<T, TKey>::insertItem(TKey key, T *values)
   next->nextEntry = createEntry(key, values);
 }
 
-template <typename T, typename TKey>
+template <class T, typename TKey>
 T HashTable<T, TKey>::searchItem(TKey key)
 {
   int hashKey = hashFunction(key);
 
   entry<T, TKey> *node = hashTable[hashKey];
 
-  // if (node == NULL)
-  //   return NULL;
+  if (node == NULL)
+    return T();
 
   while (node->id != key)
   {
     node = node->nextEntry;
 
-    // if (node == NULL)
-    // {
-    //   default(T);
-    // }
+    if (node == NULL)
+    {
+      return T();
+    }
   }
 
   return node->value;

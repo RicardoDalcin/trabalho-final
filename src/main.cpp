@@ -8,6 +8,9 @@
 // Project libraries
 #include "../lib/hash.hpp"
 
+// Test
+#include "./teste.hpp"
+
 using namespace std;
 using namespace aria::csv;
 
@@ -18,12 +21,12 @@ string PLAYERS_DATASET_PATH = DATASETS_FOLDER_PATH + "/players.csv";
 string RATING_DATASET_PATH = DATASETS_FOLDER_PATH + "/rating.csv";
 string TAGS_DATASET_PATH = DATASETS_FOLDER_PATH + "/tags.csv";
 
-typedef struct teste
-{
-  int id;
-  string name;
-  int age;
-} teste;
+// typedef struct teste
+// {
+//   int id;
+//   string name;
+//   int age;
+// } teste;
 
 int main()
 {
@@ -40,20 +43,23 @@ int main()
   //   cout << endl;
   // }
 
-  HashTable<teste, string> hashTable(2000);
+  HashTable<PlayerTest, string> hashTable(2000);
 
-  teste *player = new teste;
-  teste *playerReturn = new teste;
+  // teste *player = new teste;
+  // teste *playerReturn = new teste;
 
-  player->age = 19;
-  player->name = "Ricardo Dalcin";
-  player->id = 12345;
+  // player->age = 19;
+  // player->name = "Ricardo Dalcin";
+  // player->id = 12345;
+
+  PlayerTest player(12345, 19, "Ricardo Dalcin");
+  PlayerTest playerReturn;
 
   hashTable.insertItem("Teste", player);
 
-  *playerReturn = hashTable.searchItem("Teste");
+  playerReturn = hashTable.searchItem("Teste");
 
-  cout << playerReturn->name << playerReturn->age << playerReturn->id;
+  cout << playerReturn.toString() << endl;
 
   // HashTable<int, string> intHashTable(2000);
 
