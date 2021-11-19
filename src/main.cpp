@@ -3,6 +3,8 @@
 
 #include "../include/parser.hpp"
 
+#include "./lib/trie.hpp"
+
 using namespace std;
 using namespace aria::csv;
 
@@ -15,7 +17,7 @@ string TAGS_DATASET_PATH = DATASETS_FOLDER_PATH + "/tags.csv";
 
 // Funções de Parse
 // parametros: PlayersTrie *play_trie, PositionsHash *pos_hash, PlayersHash play_hash[]
-void parsePlayers() {
+void parsePlayers(PlayersTrie *play_trie) {
   ifstream f(PLAYERS_DATASET_PATH);
   CsvParser parser(f);
 
@@ -46,7 +48,8 @@ void parsePlayers() {
 		}
 		line++;
 	}
-  // populatePlayersTrie(play_trie, players, ids);
+
+  populatePlayersTrie(play_trie, players, ids);
   // populatePositionsHash(pos_hash, positions, ids);
   // populatePlayersHash(play_hash, players, ids, positions);
 }
@@ -106,8 +109,10 @@ void parseRatings(){
 
 int main()
 {
+  PlayersTrie play_trie;
+
   const clock_t begin_time = clock();
-  parsePlayers();
+  parsePlayers(&play_trie);
   parseRatings();
   parseTag();
   float t = float( clock () - begin_time ) /  CLOCKS_PER_SEC;
