@@ -21,51 +21,31 @@ string PLAYERS_DATASET_PATH = DATASETS_FOLDER_PATH + "/players.csv";
 string RATING_DATASET_PATH = DATASETS_FOLDER_PATH + "/rating.csv";
 string TAGS_DATASET_PATH = DATASETS_FOLDER_PATH + "/tags.csv";
 
-// typedef struct teste
-// {
-//   int id;
-//   string name;
-//   int age;
-// } teste;
-
 int main()
 {
-  // ifstream miniratingFile(MINIRATING_DATASET_PATH);
-
-  // CsvParser parser(miniratingFile);
-
-  // for (auto &row : parser)
-  // {
-  //   for (auto &field : row)
-  //   {
-  //     cout << field << " | ";
-  //   }
-  //   cout << endl;
-  // }
-
   HashTable<PlayerTest, string> hashTable(2000);
 
-  // teste *player = new teste;
-  // teste *playerReturn = new teste;
-
-  // player->age = 19;
-  // player->name = "Ricardo Dalcin";
-  // player->id = 12345;
-
   PlayerTest player(12345, 19, "Ricardo Dalcin");
-  PlayerTest playerReturn;
+  PlayerTest *playerReturn;
 
   hashTable.insertItem("Teste", player);
 
   playerReturn = hashTable.searchItem("Teste");
 
-  cout << playerReturn.toString() << endl;
+  cout << playerReturn->toString() << endl;
 
-  // HashTable<int, string> intHashTable(2000);
+  playerReturn->age = 45;
 
-  // int intTeste = 50;
+  cout << playerReturn->toString() << endl;
 
-  // intHashTable.insertItem("Chave do Teste", (int *)intTeste);
+  playerReturn = hashTable.searchItem("TestAsdasde");
 
-  // cout << intHashTable.searchItem("Chave do Teste");
+  if (playerReturn == NULL)
+  {
+    cout << "NULL" << endl;
+  }
+  else
+  {
+    cout << playerReturn->toString() << endl;
+  }
 }

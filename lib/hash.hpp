@@ -25,7 +25,7 @@ private:
 public:
   int hashFunction(TKey key);
   void insertItem(TKey key, T values);
-  T searchItem(TKey key);
+  T *searchItem(TKey key);
   HashTable(int tableSize);
 };
 
@@ -89,14 +89,14 @@ void HashTable<T, TKey>::insertItem(TKey key, T values)
 }
 
 template <class T, typename TKey>
-T HashTable<T, TKey>::searchItem(TKey key)
+T *HashTable<T, TKey>::searchItem(TKey key)
 {
   int hashKey = hashFunction(key);
 
   entry<T, TKey> *node = hashTable[hashKey];
 
   if (node == NULL)
-    return T();
+    return NULL;
 
   while (node->id != key)
   {
@@ -104,11 +104,11 @@ T HashTable<T, TKey>::searchItem(TKey key)
 
     if (node == NULL)
     {
-      return T();
+      return NULL;
     }
   }
 
-  return node->value;
+  return &node->value;
 }
 
 #endif
