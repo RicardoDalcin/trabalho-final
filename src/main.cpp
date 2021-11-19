@@ -30,22 +30,15 @@ int main()
 
   hashTable.insertItem("Teste", player);
 
+  player.id = 32155;
+
+  hashTable.insertItem("Teste2", player);
+
   playerReturn = hashTable.searchItem("Teste");
 
   cout << playerReturn->toString() << endl;
 
-  playerReturn->age = 45;
+  playerReturn = hashTable.searchItem("Teste2");
 
   cout << playerReturn->toString() << endl;
-
-  playerReturn = hashTable.searchItem("TestAsdasde");
-
-  if (playerReturn == NULL)
-  {
-    cout << "NULL" << endl;
-  }
-  else
-  {
-    cout << playerReturn->toString() << endl;
-  }
 }
