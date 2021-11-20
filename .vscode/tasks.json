@@ -7,6 +7,10 @@
         "args": [
           "-g",
           "${workspaceFolder}\\include\\parser.hpp",
+          "${workspaceFolder}\\lib\\hash.hpp",
+          "${workspaceFolder}\\lib\\trie.hpp",
+          "${workspaceFolder}\\src\\player.hpp",
+          "${workspaceFolder}\\src\\parsing.hpp",
           "${workspaceFolder}\\src\\main.cpp",
           "-o",
           "${workspaceFolder}\\bin\\app.exe"

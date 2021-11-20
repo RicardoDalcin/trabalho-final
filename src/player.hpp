@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 #include <fstream>
 
+#include "../lib/hash.hpp"
+
 #ifndef player_h
 #define player_h
 
