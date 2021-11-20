@@ -3,9 +3,9 @@
 
 ### To-do list
 
-- [ ] Criar estruturas de hash table
+- [x] Criar estruturas de hash table
 - [ ] Criar rotinas da fase 1
-- [ ] Criar estruturas de árvore trie para pesquisa
+- [x] Criar estruturas de árvore trie para pesquisa
 - [ ] Criar rotina para receber comandos de pesquisa
 - [ ] Criar pesquisa "player"
 - [ ] Criar pesquisa "user"

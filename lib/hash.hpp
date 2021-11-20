@@ -21,18 +21,19 @@ private:
   int size;
   entry<T, TKey> *createEntry(TKey key, T values);
   entry<T, TKey> **hashTable;
+  int (*hashFunction)(TKey, int);
 
 public:
-  int hashFunction(TKey key);
   void insertItem(TKey key, T values);
   T *searchItem(TKey key);
-  HashTable(int tableSize);
+  HashTable(int tableSize, int (*_hashFunction)(TKey, int));
 };
 
 template <class T, typename TKey>
-HashTable<T, TKey>::HashTable(int tableSize)
+HashTable<T, TKey>::HashTable(int tableSize, int (*_hashFunction)(TKey, int))
 {
   size = tableSize;
+  hashFunction = _hashFunction;
   hashTable = (entry<T, TKey> **)calloc(size, sizeof(entry<T, TKey> *));
 }
 
@@ -49,25 +50,9 @@ entry<T, TKey> *HashTable<T, TKey>::createEntry(TKey key, T values)
 }
 
 template <class T, typename TKey>
-int HashTable<T, TKey>::hashFunction(TKey key)
-{
-  unsigned long longHash = 5381;
-  int hash;
-
-  for (char &currentChar : key)
-  {
-    longHash = ((longHash << 5) + longHash) + currentChar;
-  }
-
-  hash = longHash % size;
-
-  return hash;
-}
-
-template <class T, typename TKey>
 void HashTable<T, TKey>::insertItem(TKey key, T values)
 {
-  int hashKey = hashFunction(key);
+  int hashKey = (*hashFunction)(key, size);
 
   entry<T, TKey> *node = hashTable[hashKey];
 
@@ -91,7 +76,7 @@ void HashTable<T, TKey>::insertItem(TKey key, T values)
 template <class T, typename TKey>
 T *HashTable<T, TKey>::searchItem(TKey key)
 {
-  int hashKey = hashFunction(key);
+  int hashKey = (*hashFunction)(key, size);
 
   entry<T, TKey> *node = hashTable[hashKey];
 

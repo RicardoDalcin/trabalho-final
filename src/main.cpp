@@ -7,10 +7,10 @@
 
 // Project libraries
 #include "../lib/hash.hpp"
+#include "../lib/trie.hpp"
 
-// Test
-#include "./teste.hpp"
-#include "./lib/trie.hpp"
+// Logic libraries
+#include "./player.hpp"
 
 using namespace std;
 using namespace aria::csv;
@@ -126,34 +126,16 @@ void parseRatings()
 
 int main()
 {
-  PlayersTrie play_trie;
+  PlayersTrie playersTrie;
+  PlayersHashTable playersHashTable;
 
   const clock_t begin_time = clock();
-  parsePlayers(&play_trie);
+  parsePlayers(&playersTrie);
   parseRatings();
   parseTag();
   float t = float(clock() - begin_time) / CLOCKS_PER_SEC;
 
   cout << "Tempo de parsing" << t << endl;
-
-  HashTable<PlayerTest, string> hashTable(2000);
-
-  PlayerTest player(12345, 19, "Ricardo Dalcin");
-  PlayerTest *playerReturn;
-
-  hashTable.insertItem("Teste", player);
-
-  player.id = 32155;
-
-  hashTable.insertItem("Teste2", player);
-
-  playerReturn = hashTable.searchItem("Teste");
-
-  cout << playerReturn->toString() << endl;
-
-  playerReturn = hashTable.searchItem("Teste2");
-
-  cout << playerReturn->toString() << endl;
 
   return 0;
 }
