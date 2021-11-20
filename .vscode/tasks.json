@@ -11,6 +11,7 @@
           "${workspaceFolder}\\lib\\trie.hpp",
           "${workspaceFolder}\\src\\player.hpp",
           "${workspaceFolder}\\src\\parsing.hpp",
+          "${workspaceFolder}\\src\\console.hpp",
           "${workspaceFolder}\\src\\main.cpp",
           "-o",
           "${workspaceFolder}\\bin\\app.exe"
