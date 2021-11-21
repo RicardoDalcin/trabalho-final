@@ -43,13 +43,13 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
 
       // separa a string com as posicoes em um vetor
       size_t first = 0;
-      size_t separator = row[2].find(',', 0);
+      size_t separator = row[2].find(", ", 0);
 
       while (separator != string::npos)
       {
         positions.push_back(row[2].substr(first, separator - first));
-        first = separator + 1;
-        separator = row[2].find(',', first);
+        first = separator + 2;
+        separator = row[2].find(", ", first);
       }
       positions.push_back(row[2].substr(first, row[2].length()));
 
