@@ -6,8 +6,8 @@
 - [x] Criar estruturas de hash table
 - [ ] Criar rotinas da fase 1
 - [x] Criar estruturas de árvore trie para pesquisa
-- [ ] Criar rotina para receber comandos de pesquisa
-- [ ] Criar pesquisa "player"
+- [x] Criar rotina para receber comandos de pesquisa
+- [x] Criar pesquisa "player"
 - [ ] Criar pesquisa "user"
 - [ ] Criar pesquisa "top&lt;N&gt;"
 - [ ] Criar pesquisa "tags"
