@@ -17,7 +17,7 @@ private:
   string name_;
   vector<string> positions_;
   int ratingsCount_;
-  double ratingsTotal_;
+  float ratingsTotal_;
 
 public:
   Player(int id, string name, vector<string> positions);
@@ -29,8 +29,8 @@ public:
   const int ratingsCount() const { return ratingsCount_; }
 
   string positionsString();
-  void addRating(double rating);
-  double globalRating();
+  void addRating(float rating);
+  float globalRating();
 };
 
 Player::Player(int id, string name, vector<string> positions)
@@ -69,13 +69,13 @@ string Player::positionsString()
   return positionsValue;
 }
 
-void Player::addRating(double rating)
+void Player::addRating(float rating)
 {
   ratingsCount_++;
   ratingsTotal_ += rating;
 }
 
-double Player::globalRating()
+float Player::globalRating()
 {
   return ratingsTotal_ / ratingsCount_;
 }

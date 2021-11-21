@@ -24,7 +24,7 @@ int main()
   const clock_t begin_time = clock();
 
   parsePlayers(&playersTrie, &playersHashTable);
-  // parseRatings();
+  parseRatings(&playersHashTable);
   // parseTag();
 
   float t = float(clock() - begin_time) / CLOCKS_PER_SEC;

@@ -59,6 +59,7 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
 
       playersTrie->insert(name, id);
     }
+
     line++;
   }
 }
@@ -69,24 +70,17 @@ void parseTag()
   ifstream f(TAGS_DATASET_PATH);
   CsvParser parser(f);
 
-  vector<string> tags;
-  vector<int> players_ids;
-  vector<int> user_ids;
-
   int line = 0;
 
   for (auto &row : parser)
   {
     if (line)
     {
-      int u_id = stoi(row[0]);
-      int m_id = stoi(row[1]);
+      int userId = stoi(row[0]);
+      int playerId = stoi(row[1]);
       string tag = row[2];
-
-      // tags.push_back(tag);
-      // players_ids.push_back(m_id);
-      // user_ids.push_back(u_id);
     }
+
     line++;
   }
 
@@ -94,14 +88,10 @@ void parseTag()
 }
 
 // Parâmetros: UserHash u_hash[], PlayersHash play_hash[]
-void parseRatings()
+void parseRatings(PlayersHashTable *playersHashTable)
 {
   ifstream f(RATING_DATASET_PATH);
   CsvParser parser(f);
-
-  vector<float> ratings;
-  vector<int> user_ids;
-  vector<int> players_ids;
 
   int line = 0;
 
@@ -109,9 +99,12 @@ void parseRatings()
   {
     if (line)
     {
-      int u_id = stoi(row[0]);
-      int p_id = stoi(row[1]);
-      float ra = stof(row[2]);
+      int userId = stoi(row[0]);
+      int playerId = stoi(row[1]);
+      float rating = stof(row[2]);
+
+      Player *player = playersHashTable->search(playerId);
+      player->addRating(rating);
 
       // ratings.push_back(ra);
       // players_ids.push_back(p_id);

@@ -167,6 +167,8 @@ void Console::playerCommand(string command)
     cout << endl
          << "The arguments provided are not valid" << endl
          << endl;
+
+    return;
   }
 
   vector<int> matchedPlayers = playersTrie_->prefixSearch(playerArgument);
@@ -198,6 +200,7 @@ void Console::playerCommand(string command)
     printElement(player->id(), 12);
     printElement(player->name(), 48);
     printElement(player->positionsString(), 24);
+    cout << fixed << setprecision(6);
     printElement(player->globalRating(), 12);
     printElement(player->ratingsCount(), 8);
     cout << endl;
