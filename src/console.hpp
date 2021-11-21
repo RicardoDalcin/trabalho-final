@@ -55,6 +55,35 @@ void printPlayerData(Player *player)
   cout << endl;
 }
 
+bool isEmpty(string word)
+{
+  regex emptyString("([ ]*)");
+
+  return regex_match(word.begin(), word.end(), emptyString);
+}
+
+bool isNumber(string word)
+{
+  regex numberString("([0-9]+)");
+
+  return regex_match(word.begin(), word.end(), numberString);
+}
+
+vector<string> splitString(string word, char separator)
+{
+  vector<string> tokens;
+  stringstream stream(word);
+  string currentToken;
+
+  while (getline(stream, currentToken, separator))
+  {
+    if (!isEmpty(currentToken))
+      tokens.push_back(currentToken);
+  }
+
+  return tokens;
+}
+
 string parseArguments(string command)
 {
   vector<string> tokens;
@@ -85,6 +114,13 @@ string parseArguments(string command)
   }
 
   return argument;
+}
+
+string parseCommandName(string command)
+{
+  string commandOnly = command.substr(0, command.find(" "));
+
+  return commandOnly;
 }
 
 // CLASSE DE COMMAND
@@ -154,7 +190,7 @@ Console::Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
 
   commands.push_back(Command("(player)(?![^ ])(.*)", playerCommand));
   commands.push_back(Command("(user)(?![^ ])(.*)", userCommand));
-  commands.push_back(Command("(top[1-9]+)(?![^ ])(.*)", topCommand));
+  commands.push_back(Command("(top[0-9]+)(?![^ ])(.*)", topCommand));
   commands.push_back(Command("(tags)(?![^ ])(.*)", tagsCommand));
   commands.push_back(Command("(help)([ ]*)", helpCommand));
   commands.push_back(Command("(exit)([ ]*)", exitCommand));
@@ -179,16 +215,9 @@ void Console::parseCommand(string command)
 
 void Console::playerCommand(string command)
 {
-  vector<string> tokens;
-  stringstream stream(command);
-  string currentToken;
-  int i = 0;
-
   string playerArgument = parseArguments(command);
 
-  regex emptyString("([ ]*)");
-
-  if (regex_match(playerArgument.begin(), playerArgument.end(), emptyString))
+  if (isEmpty(playerArgument))
   {
     invalidArgumentsMessage();
     return;
@@ -208,7 +237,8 @@ void Console::playerCommand(string command)
   {
     Player *player = playersHashTable_->search(playerId);
 
-    printPlayerData(player);
+    if (player != NULL)
+      printPlayerData(player);
   }
 
   cout << endl;
@@ -216,26 +246,71 @@ void Console::playerCommand(string command)
 
 void Console::userCommand(string command)
 {
+  string userArgument = parseArguments(command);
+
+  if (!isNumber(userArgument))
+  {
+    invalidArgumentsMessage();
+    return;
+  }
+
+  int userId = stoi(userArgument);
+
   cout << endl
-       << "Command not implemented" << endl
-       << command << endl
-       << endl;
+       << "USERID: <" << userId << ">";
+
+  cout << endl;
 }
 
 void Console::topCommand(string command)
 {
+  string positionArgument = parseArguments(command);
+  string commandArgument = parseCommandName(command);
+
+  positionArgument.erase(remove(positionArgument.begin(), positionArgument.end(), '\''), positionArgument.end());
+
+  commandArgument.erase(0, 3);
+
+  if (isEmpty(positionArgument) || !isNumber(commandArgument))
+  {
+    invalidArgumentsMessage();
+    return;
+  }
+
+  int topSize = stoi(commandArgument);
+
+  if (topSize == 0)
+  {
+    invalidArgumentsMessage();
+    return;
+  }
+
   cout << endl
-       << "Command not implemented" << endl
-       << command << endl
+       << "TOP N: <" << topSize << ">" << endl
+       << "POSITION: <" << positionArgument << ">" << endl
        << endl;
+
+  cout << endl;
 }
 
 void Console::tagsCommand(string command)
 {
-  cout << endl
-       << "Command not implemented" << endl
-       << command << endl
-       << endl;
+  string tagsArgument = parseArguments(command);
+
+  vector<string> positions;
+
+  if (isEmpty(tagsArgument))
+  {
+    invalidArgumentsMessage();
+    return;
+  }
+
+  positions = splitString(tagsArgument, ' ');
+
+  for (auto &position : positions)
+    position.erase(remove(position.begin(), position.end(), '\''), position.end());
+
+  cout << endl;
 }
 
 void Console::exitCommand(string command)
