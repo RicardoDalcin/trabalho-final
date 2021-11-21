@@ -29,6 +29,31 @@ void printCharWithSize(char toPrint, int width)
   }
 }
 
+void printPlayerHeader()
+{
+  cout << endl;
+  printElement("sofifa_id", 12);
+  printElement("name", 48);
+  printElement("player_positions", 24);
+  printElement("rating", 12);
+  printElement("count", 8);
+  cout << endl;
+
+  printCharWithSize('-', 12 + 48 + 24 + 12 + 8);
+  cout << endl;
+}
+
+void printPlayerData(Player *player)
+{
+  printElement(player->id(), 12);
+  printElement(player->name(), 48);
+  printElement(player->positionsString(), 24);
+  cout << fixed << setprecision(6);
+  printElement(player->globalRating(), 12);
+  printElement(player->ratingsCount(), 8);
+  cout << endl;
+}
+
 string parseArguments(string command)
 {
   vector<string> tokens;
@@ -182,28 +207,13 @@ void Console::playerCommand(string command)
     return;
   }
 
-  cout << endl;
-  printElement("sofifa_id", 12);
-  printElement("name", 48);
-  printElement("player_positions", 24);
-  printElement("rating", 12);
-  printElement("count", 8);
-  cout << endl;
-
-  printCharWithSize('-', 12 + 48 + 24 + 12 + 8);
-  cout << endl;
+  printPlayerHeader();
 
   for (auto playerId : matchedPlayers)
   {
     Player *player = playersHashTable_->search(playerId);
 
-    printElement(player->id(), 12);
-    printElement(player->name(), 48);
-    printElement(player->positionsString(), 24);
-    cout << fixed << setprecision(6);
-    printElement(player->globalRating(), 12);
-    printElement(player->ratingsCount(), 8);
-    cout << endl;
+    printPlayerData(player);
   }
 
   cout << endl;
