@@ -26,7 +26,9 @@ public:
   const int id() const { return id_; }
   const string name() const { return name_; }
   const vector<string> positions() const { return positions_; }
+  const int ratingsCount() const { return ratingsCount_; }
 
+  string positionsString();
   void addRating(double rating);
   double globalRating();
 };
@@ -46,6 +48,25 @@ Player::Player()
   name_ = "";
   ratingsCount_ = 0;
   ratingsTotal_ = 0;
+}
+
+string Player::positionsString()
+{
+  string positionsValue;
+
+  int i = 0;
+
+  for (auto position : positions_)
+  {
+    if (i == 0)
+      positionsValue = position;
+    else
+      positionsValue = positionsValue + ", " + position;
+
+    i++;
+  }
+
+  return positionsValue;
 }
 
 void Player::addRating(double rating)

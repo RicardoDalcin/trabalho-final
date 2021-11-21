@@ -13,6 +13,54 @@
 
 using namespace std;
 
+// FUNCOES HELPERS
+
+template <typename T>
+void printElement(T t, const int &width)
+{
+  cout << right << setw(width) << setfill(' ') << t;
+}
+
+void printCharWithSize(char toPrint, int width)
+{
+  for (int i = 1; i <= width; i++)
+  {
+    cout << toPrint;
+  }
+}
+
+string parseArguments(string command)
+{
+  vector<string> tokens;
+  stringstream stream(command);
+  string currentToken;
+  int i = 0;
+
+  string argument;
+
+  while (getline(stream, currentToken, ' '))
+  {
+    if (i > 0)
+      tokens.push_back(currentToken);
+
+    i++;
+  }
+
+  i = 0;
+
+  for (auto token : tokens)
+  {
+    if (i == 0)
+      argument = token;
+    else
+      argument = argument + " " + token;
+
+    i++;
+  }
+
+  return argument;
+}
+
 // CLASSE DE COMMAND
 
 class Console;
@@ -105,6 +153,57 @@ void Console::parseCommand(string command)
 
 void Console::playerCommand(string command)
 {
+  vector<string> tokens;
+  stringstream stream(command);
+  string currentToken;
+  int i = 0;
+
+  string playerArgument = parseArguments(command);
+
+  regex emptyString("([ ]*)");
+
+  if (regex_match(playerArgument.begin(), playerArgument.end(), emptyString))
+  {
+    cout << endl
+         << "The arguments provided are not valid" << endl
+         << endl;
+  }
+
+  vector<int> matchedPlayers = playersTrie_->prefixSearch(playerArgument);
+
+  if (!matchedPlayers.size())
+  {
+    cout << endl
+         << "No players found with given parameter" << endl
+         << endl;
+
+    return;
+  }
+
+  cout << endl;
+  printElement("sofifa_id", 12);
+  printElement("name", 48);
+  printElement("player_positions", 24);
+  printElement("rating", 12);
+  printElement("count", 8);
+  cout << endl;
+
+  printCharWithSize('-', 12 + 48 + 24 + 12 + 8);
+  cout << endl;
+
+  for (auto playerId : matchedPlayers)
+  {
+    Player *player = playersHashTable_->search(playerId);
+
+    printElement(player->id(), 12);
+    printElement(player->name(), 48);
+    printElement(player->positionsString(), 24);
+    printElement(player->globalRating(), 12);
+    printElement(player->ratingsCount(), 8);
+    cout << endl;
+  }
+
+  cout << endl;
 }
 
 void Console::userCommand(string command)
