@@ -33,7 +33,7 @@ int main()
   UsersHashTable usersHashTable;
   TagsHashTable tagsHashTable;
 
-  Console console(&playersTrie, &playersHashTable, &positionHashTable, &tagsHashTable);
+  Console console(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable, &tagsHashTable);
 
   // // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
   parseData(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable, &tagsHashTable);

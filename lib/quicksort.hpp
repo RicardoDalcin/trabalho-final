@@ -1,55 +1,77 @@
 #include<stdio.h>
 #include "../src/player.hpp"
+#include "../src/users.hpp"
 
-// A utility function to swap two elements
-void swap(Player* a, Player* b)
+// Quicksort to sort Players
+void swapPlayers(Player* a, Player* b)
 {
     Player t = *a;
     *a = *b;
     *b = t;
 }
  
-/* This function takes last element as pivot, places
-   the pivot element at its correct position in sorted
-    array, and places all smaller (smaller than pivot)
-   to left of pivot and all greater elements to right
-   of pivot */
-float partition (Player* arr[], int low, int high)
+float partitionPlayers (Player arr[], int low, int high)
 {
-    Player* pivotPlayer = arr[high];
-    float pivot = pivotPlayer->globalRating();    // pivot
+    Player pivotPlayer = arr[high];
+    float pivot = pivotPlayer.globalRating();    // pivot
     int i = (low - 1);  // Index of smaller element
  
     for (int j = low; j <= high- 1; j++)
     {
-        // If current element is smaller than or
-        // equal to pivot
-        Player* player = arr[j];
-        if (player->globalRating() <= pivot)
+        Player player = arr[j];
+        if (player.globalRating() <= pivot)
         {
-            i++;    // increment index of smaller element
-            swap(arr[i], arr[j]);
+            i++;
+            swapPlayers(&arr[i], &arr[j]);
         }
     }
-    swap(arr[i + 1], arr[high]);
+    swapPlayers(&arr[i + 1], &arr[high]);
     return (i + 1);
 }
  
-/* The main function that implements QuickSort
- arr[] --> Array to be sorted,
-  low  --> Starting index,
-  high  --> Ending index */
-void quickSort(Player* arr[], int low, int high)
+void quickSortPlayers(Player arr[], int low, int high)
 {
     if (low < high)
     {
-        /* pi is partitioning index, arr[p] is now
-           at right place */
-        int pi = partition(arr, low, high);
+        int pi = partitionPlayers(arr, low, high);
+        quickSortPlayers(arr, low, pi - 1);
+        quickSortPlayers(arr, pi + 1, high);
+    }
+}
+
+// Quicksort to sort User Ratings
+void swapRatings(Rating* a, Rating* b)
+{
+    Rating t = *a;
+    *a = *b;
+    *b = t;
+}
  
-        // Separately sort elements before
-        // partition and after partition
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+float partitionRatings (Rating arr[], int low, int high)
+{
+    Rating pivotRating = arr[high];
+    float pivot = pivotRating.rate();    // pivot
+    int i = (low - 1);  // Index of smaller element
+ 
+    for (int j = low; j <= high- 1; j++)
+    {
+        Rating Rating = arr[j];
+        if (Rating.rate() <= pivot)
+        {
+            i++;
+            swapRatings(&arr[i], &arr[j]);
+        }
+    }
+    swapRatings(&arr[i + 1], &arr[high]);
+    return (i + 1);
+}
+ 
+void quickSortRatings(Rating arr[], int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partitionRatings(arr, low, high);
+        quickSortRatings(arr, low, pi - 1);
+        quickSortRatings(arr, pi + 1, high);
     }
 }
