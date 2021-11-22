@@ -15,6 +15,7 @@
 // Logic libraries
 #include "./player.hpp"
 #include "./users.hpp"
+#include "./positions.hpp"
 
 #ifndef parsing_h
 #define parsing_h
@@ -31,7 +32,7 @@ string TAGS_DATASET_PATH = DATASETS_FOLDER_PATH + "/tags.csv";
 
 // Funções de Parse
 // parametros: PlayersTrie *playersTrie, PositionsHash *pos_hash, PlayersHash play_hash[]
-void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, indicators::BlockProgressBar *bar)
+void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, indicators::BlockProgressBar *bar)
 {
   ifstream f(PLAYERS_DATASET_PATH);
   CsvParser parser(f);
@@ -63,6 +64,22 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, 
       playersHashTable->insert(id, playerObject);
 
       playersTrie->insert(name, id);
+
+      for(int i = 0; i < positions.size(); i++)
+      {
+        Position *position = positionHashTable->search(positions[i]);
+        if(position == NULL)
+        {
+          vector<int> playerIds;
+          playerIds.push_back(id);
+          Position newPosition = Position(positions[i], playerIds);
+          positionHashTable->insert(positions[i], newPosition);
+        }
+        else
+        {
+          position->addPlayer(id);
+        }
+      }
 
       if (line % 100000 == 0)
         bar->tick();
@@ -115,16 +132,13 @@ void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashT
       player->addRating(rating);
       Rating newRate = Rating(rating, playerId);
 
-      // ratings.push_back(ra);
-      // players_ids.push_back(p_id);
-      // user_ids.push_back(u_id);
-
       User *user = usersHashTable->search(userId);
       if (user == NULL)
       {
         vector<Rating> ratingVec;
         ratingVec.push_back(newRate);
         User newUser = User(userId, ratingVec);
+        usersHashTable->insert(userId, newUser);
       }
       else
       {
@@ -138,7 +152,7 @@ void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashT
   }
 }
 
-void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, UsersHashTable *usersHashTable)
+void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, UsersHashTable *usersHashTable)
 {
   // Hide cursor
   indicators::show_console_cursor(false);
@@ -153,9 +167,9 @@ void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, Use
 
   const clock_t begin_time = clock();
 
-  parsePlayers(playersTrie, playersHashTable, &bar);
+  parsePlayers(playersTrie, playersHashTable, positionHashTable, &bar);
   parseRatings(usersHashTable, playersHashTable, &bar);
-  // parseTag();
+  parseTag();
 
   bar.mark_as_completed();
 

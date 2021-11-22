@@ -10,6 +10,7 @@
 #include "./interface.hpp"
 #include "./parsing.hpp"
 #include "./player.hpp"
+#include "./positions.hpp"
 #include "./users.hpp"
 #include "./console.hpp"
 
@@ -27,12 +28,13 @@ int main()
 
   PlayersTrie playersTrie;
   PlayersHashTable playersHashTable;
+  PositionHashTable positionHashTable;
   UsersHashTable usersHashTable;
 
   Console console(&playersTrie, &playersHashTable);
 
   // // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
-  parseData(&playersTrie, &playersHashTable, &usersHashTable);
+  parseData(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable);
 
   // FASE 2 - MODO CONSOLE
   while (!console.shouldExit())
