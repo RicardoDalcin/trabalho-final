@@ -311,13 +311,19 @@ void Console::topCommand(string command)
   copy(allPlayers.begin(), allPlayers.end(), playerArr);
 
   int n = sizeof(playerArr)/sizeof(playerArr[0]);
-  quickSort(playerArr, 0, n);
+  quickSort(playerArr, 0, n-1);
+
+  if(topSize > n)
+  {
+    topSize = n;
+    topValueTooBigMessage(topSize);
+  }
 
   printPlayerHeader();
 
   for (int i = 0; i < topSize; i++)
   {
-    printPlayerData(playerArr[i]);
+    printPlayerData(playerArr[n-1-i]);
   }
 }
 
