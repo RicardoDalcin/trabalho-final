@@ -57,6 +57,17 @@ void printPlayerData(Player *player)
   cout << endl;
 }
 
+void printPlayerData(Player player)
+{
+  printElement(player.id(), 12);
+  printElement(player.name(), 48);
+  printElement(player.positionsString(), 24);
+  cout << fixed << setprecision(6);
+  printElement(player.globalRating(), 12);
+  printElement(player.ratingsCount(), 8);
+  cout << endl;
+}
+
 bool isEmpty(string word)
 {
   regex emptyString("([ ]*)");
@@ -165,6 +176,7 @@ private:
   PlayersTrie *playersTrie_;
   PlayersHashTable *playersHashTable_;
   PositionHashTable *positionHashTable_;
+  UsersHashTable *userHashTable_;
 
   void playerCommand(string command);
   void userCommand(string command);
@@ -178,19 +190,20 @@ private:
   vector<Command> commands;
 
 public:
-  Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable);
+  Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, UsersHashTable *userHashTable);
 
   const int shouldExit() const { return shouldExit_; }
 
   void parseCommand(string command);
 };
 
-Console::Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable)
+Console::Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, UsersHashTable *userHashTable)
 {
   shouldExit_ = false;
   playersTrie_ = playersTrie;
   playersHashTable_ = playersHashTable;
   positionHashTable_ = positionHashTable;
+  userHashTable_ = userHashTable;
 
   commands.push_back(Command("(player)(?![^ ])(.*)", playerCommand));
   commands.push_back(Command("(user)(?![^ ])(.*)", userCommand));
@@ -260,10 +273,33 @@ void Console::userCommand(string command)
 
   int userId = stoi(userArgument);
 
-  cout << endl
-       << "USERID: <" << userId << ">";
+  User *user = userHashTable_->search(userId);
+  vector<Rating> userRatings = user->rating();
 
-  cout << endl;
+  Rating ratingsArr[userRatings.size()];
+  copy(userRatings.begin(), userRatings.end(), ratingsArr);
+
+  int n = sizeof(ratingsArr)/sizeof(ratingsArr[0]);
+  quickSortRatings(ratingsArr, 0, n-1);
+
+  vector<Player*> topPlayers;
+
+  int topSize = 20;
+  if(topSize > n)
+  {
+    topSize = n;
+  }
+
+  for(int i = 0; i < topSize; i++)
+  {
+    int playerId = ratingsArr[n-1-i].playerId();
+    float userRate = ratingsArr[n-1-i].rate();
+    Player *player = playersHashTable_->search(playerId);
+
+    if (player != NULL)
+      printPlayerData(player);
+      cout << userRate << endl;
+  }
 }
 
 void Console::topCommand(string command)
@@ -292,7 +328,7 @@ void Console::topCommand(string command)
   Position *positionObject = positionHashTable_->search(positionArgument);
 
   vector<int> allPlayersIds = positionObject->playerIds();
-  vector<Player*> allPlayers;
+  vector<Player> allPlayers;
   for (auto playerId : allPlayersIds)
   {
     Player *player = playersHashTable_->search(playerId);
@@ -301,14 +337,17 @@ void Console::topCommand(string command)
     {
       if(player->ratingsCount() >= 1000)
       {
-        allPlayers.push_back(player);
+        allPlayers.push_back(*player);
       }
     }
   }
 
-  Player* playerArr[allPlayers.size()];
+  Player playerArr[allPlayers.size()];
 
-  copy(allPlayers.begin(), allPlayers.end(), playerArr);
+  for(int i = 0; i < allPlayers.size(); i++)
+  {
+    playerArr[i] = allPlayers[i];
+  }
 
   int n = sizeof(playerArr)/sizeof(playerArr[0]);
   quickSortPlayers(playerArr, 0, n-1);
