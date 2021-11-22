@@ -311,7 +311,7 @@ void Console::topCommand(string command)
   copy(allPlayers.begin(), allPlayers.end(), playerArr);
 
   int n = sizeof(playerArr)/sizeof(playerArr[0]);
-  quickSort(playerArr, 0, n-1);
+  quickSortPlayers(playerArr, 0, n-1);
 
   if(topSize > n)
   {
