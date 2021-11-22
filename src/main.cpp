@@ -7,27 +7,30 @@
 #include "../lib/trie.hpp"
 
 // Logic libraries
+#include "./interface.hpp"
 #include "./parsing.hpp"
 #include "./player.hpp"
 #include "./console.hpp"
+
+#pragma execution_character_set("utf-8")
 
 using namespace std;
 
 int main()
 {
+  SetConsoleOutputCP(65001);
+
+  // introduction();
+
+  // Sleep(5000);
+
   PlayersTrie playersTrie;
   PlayersHashTable playersHashTable;
 
   Console console(&playersTrie, &playersHashTable);
 
-  // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
-  const clock_t begin_time = clock();
-
-  parsePlayers(&playersTrie, &playersHashTable);
-  parseRatings(&playersHashTable);
-  // parseTag();
-
-  float t = float(clock() - begin_time) / CLOCKS_PER_SEC;
+  // // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
+  parseData(&playersTrie, &playersHashTable);
 
   // FASE 2 - MODO CONSOLE
   while (!console.shouldExit())

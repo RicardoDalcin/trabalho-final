@@ -1,9 +1,13 @@
 // Standard libraries
 #include <bits/stdc++.h>
 #include <iostream>
+#include <windows.h>
+#include <chrono>
+#include <thread>
 
 // External libraries
 #include "../include/parser.hpp"
+#include "../include/indicators.hpp"
 
 // Project libraries
 #include "../lib/trie.hpp"
@@ -26,7 +30,7 @@ string TAGS_DATASET_PATH = DATASETS_FOLDER_PATH + "/tags.csv";
 
 // Funções de Parse
 // parametros: PlayersTrie *playersTrie, PositionsHash *pos_hash, PlayersHash play_hash[]
-void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
+void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, indicators::BlockProgressBar *bar)
 {
   ifstream f(PLAYERS_DATASET_PATH);
   CsvParser parser(f);
@@ -58,6 +62,9 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
       playersHashTable->insert(id, playerObject);
 
       playersTrie->insert(name, id);
+
+      if (line % 100000 == 0)
+        bar->tick();
     }
 
     line++;
@@ -88,7 +95,7 @@ void parseTag()
 }
 
 // Parâmetros: UserHash u_hash[], PlayersHash play_hash[]
-void parseRatings(PlayersHashTable *playersHashTable)
+void parseRatings(PlayersHashTable *playersHashTable, indicators::BlockProgressBar *bar)
 {
   ifstream f(RATING_DATASET_PATH);
   CsvParser parser(f);
@@ -109,10 +116,44 @@ void parseRatings(PlayersHashTable *playersHashTable)
       // ratings.push_back(ra);
       // players_ids.push_back(p_id);
       // user_ids.push_back(u_id);
+
+      if ((line + 18944) % 100000 == 0)
+        bar->tick();
     }
     line++;
   }
   // populateUserHash(u_hash, play_hash, ratings, players_ids, user_ids);
+}
+
+void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
+{
+  // Hide cursor
+  indicators::show_console_cursor(false);
+
+  using namespace indicators;
+  BlockProgressBar bar{
+      option::BarWidth{80},
+      option::ForegroundColor{Color::white},
+      option::FontStyles{
+          std::vector<FontStyle>{FontStyle::bold}},
+      option::MaxProgress{242}};
+
+  const clock_t begin_time = clock();
+
+  parsePlayers(playersTrie, playersHashTable, &bar);
+  parseRatings(playersHashTable, &bar);
+  // parseTag();
+
+  bar.mark_as_completed();
+
+  // // Show cursor
+  // indicators::show_console_cursor(true);
+
+  float t = float(clock() - begin_time) / CLOCKS_PER_SEC;
+
+  cout << "Elapsed time: " << t << " seconds" << endl;
+
+  return;
 }
 
 #endif
