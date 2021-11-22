@@ -300,6 +300,13 @@ void Console::userCommand(string command)
   int userId = stoi(userArgument);
 
   User *user = userHashTable_->search(userId);
+
+  if (user == NULL)
+  {
+    invalidArgumentsMessage();
+    return;
+  }
+
   vector<Rating> userRatings = user->rating();
 
   Rating ratingsArr[userRatings.size()];
@@ -353,6 +360,12 @@ void Console::topCommand(string command)
   }
 
   Position *positionObject = positionHashTable_->search(positionArgument);
+
+  if (positionObject == NULL)
+  {
+    invalidArgumentsMessage();
+    return;
+  }
 
   vector<int> allPlayersIds = positionObject->playerIds();
   vector<Player> allPlayers;
