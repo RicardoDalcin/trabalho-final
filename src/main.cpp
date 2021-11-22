@@ -9,6 +9,7 @@
 // Logic libraries
 #include "./parsing.hpp"
 #include "./player.hpp"
+#include "./users.hpp"
 #include "./console.hpp"
 
 using namespace std;
@@ -17,6 +18,7 @@ int main()
 {
   PlayersTrie playersTrie;
   PlayersHashTable playersHashTable;
+  UsersHashTable usersHashTable;
 
   Console console(&playersTrie, &playersHashTable);
 
@@ -24,7 +26,7 @@ int main()
   const clock_t begin_time = clock();
 
   parsePlayers(&playersTrie, &playersHashTable);
-  parseRatings(&playersHashTable);
+  parseRatings(&usersHashTable, &playersHashTable);
   // parseTag();
 
   float t = float(clock() - begin_time) / CLOCKS_PER_SEC;

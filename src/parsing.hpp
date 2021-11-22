@@ -10,6 +10,7 @@
 
 // Logic libraries
 #include "./player.hpp"
+#include "./users.hpp"
 
 #ifndef parsing_h
 #define parsing_h
@@ -88,7 +89,7 @@ void parseTag()
 }
 
 // Parâmetros: UserHash u_hash[], PlayersHash play_hash[]
-void parseRatings(PlayersHashTable *playersHashTable)
+void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashTable)
 {
   ifstream f(RATING_DATASET_PATH);
   CsvParser parser(f);
@@ -105,14 +106,22 @@ void parseRatings(PlayersHashTable *playersHashTable)
 
       Player *player = playersHashTable->search(playerId);
       player->addRating(rating);
+      Rating newRate = Rating(rating, playerId);
 
-      // ratings.push_back(ra);
-      // players_ids.push_back(p_id);
-      // user_ids.push_back(u_id);
+      User *user = usersHashTable->search(userId);
+      if(user == NULL)
+      {
+        vector<Rating> ratingVec;
+        ratingVec.push_back(newRate);
+        User newUser = User(userId, ratingVec);     
+      }
+      else
+      {
+        user->addRating(newRate);
+      }
     }
     line++;
   }
-  // populateUserHash(u_hash, play_hash, ratings, players_ids, user_ids);
 }
 
 #endif
