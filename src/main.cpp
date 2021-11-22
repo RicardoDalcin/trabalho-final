@@ -31,7 +31,7 @@ int main()
   PositionHashTable positionHashTable;
   UsersHashTable usersHashTable;
 
-  Console console(&playersTrie, &playersHashTable);
+  Console console(&playersTrie, &playersHashTable, &positionHashTable);
 
   // // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
   parseData(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable);

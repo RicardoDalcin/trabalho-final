@@ -4,10 +4,12 @@
 
 // Internal libraries
 #include "../lib/trie.hpp"
+#include "../lib/quicksort.hpp"
 
 // Logic libraries
 #include "./messages.hpp"
 #include "./player.hpp"
+#include "./positions.hpp"
 
 #ifndef console_h
 #define console_h
@@ -162,6 +164,7 @@ private:
   bool shouldExit_;
   PlayersTrie *playersTrie_;
   PlayersHashTable *playersHashTable_;
+  PositionHashTable *positionHashTable_;
 
   void playerCommand(string command);
   void userCommand(string command);
@@ -175,18 +178,19 @@ private:
   vector<Command> commands;
 
 public:
-  Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable);
+  Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable);
 
   const int shouldExit() const { return shouldExit_; }
 
   void parseCommand(string command);
 };
 
-Console::Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
+Console::Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable)
 {
   shouldExit_ = false;
   playersTrie_ = playersTrie;
   playersHashTable_ = playersHashTable;
+  positionHashTable_ = positionHashTable;
 
   commands.push_back(Command("(player)(?![^ ])(.*)", playerCommand));
   commands.push_back(Command("(user)(?![^ ])(.*)", userCommand));
@@ -285,12 +289,36 @@ void Console::topCommand(string command)
     return;
   }
 
-  cout << endl
-       << "TOP N: <" << topSize << ">" << endl
-       << "POSITION: <" << positionArgument << ">" << endl
-       << endl;
+  Position *positionObject = positionHashTable_->search(positionArgument);
 
-  cout << endl;
+  vector<int> allPlayersIds = positionObject->playerIds();
+  vector<Player*> allPlayers;
+  for (auto playerId : allPlayersIds)
+  {
+    Player *player = playersHashTable_->search(playerId);
+
+    if (player != NULL)
+    {
+      if(player->ratingsCount() >= 1000)
+      {
+        allPlayers.push_back(player);
+      }
+    }
+  }
+
+  Player* playerArr[allPlayers.size()];
+
+  copy(allPlayers.begin(), allPlayers.end(), playerArr);
+
+  int n = sizeof(playerArr)/sizeof(playerArr[0]);
+  quickSort(playerArr, 0, n);
+
+  printPlayerHeader();
+
+  for (int i = 0; i < topSize; i++)
+  {
+    printPlayerData(playerArr[i]);
+  }
 }
 
 void Console::tagsCommand(string command)
