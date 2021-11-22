@@ -5,7 +5,7 @@
 #ifndef trie_h
 #define trie_h
 
-#define ALPH_SIZE 31    // 'a'-'z', ' ' and '-' and '.'
+#define ALPH_SIZE 31    // 'a'-'z', ' ', '-', '.', '\'', '"'
 #define ASCII_OFFSET 97 // 'a'
 
 using namespace std;

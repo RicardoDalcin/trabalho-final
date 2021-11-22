@@ -14,6 +14,7 @@
 
 // Logic libraries
 #include "./player.hpp"
+#include "./users.hpp"
 
 #ifndef parsing_h
 #define parsing_h
@@ -95,7 +96,7 @@ void parseTag()
 }
 
 // Parâmetros: UserHash u_hash[], PlayersHash play_hash[]
-void parseRatings(PlayersHashTable *playersHashTable, indicators::BlockProgressBar *bar)
+void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashTable, indicators::BlockProgressBar *bar)
 {
   ifstream f(RATING_DATASET_PATH);
   CsvParser parser(f);
@@ -112,20 +113,32 @@ void parseRatings(PlayersHashTable *playersHashTable, indicators::BlockProgressB
 
       Player *player = playersHashTable->search(playerId);
       player->addRating(rating);
+      Rating newRate = Rating(rating, playerId);
 
       // ratings.push_back(ra);
       // players_ids.push_back(p_id);
       // user_ids.push_back(u_id);
+
+      User *user = usersHashTable->search(userId);
+      if (user == NULL)
+      {
+        vector<Rating> ratingVec;
+        ratingVec.push_back(newRate);
+        User newUser = User(userId, ratingVec);
+      }
+      else
+      {
+        user->addRating(newRate);
+      }
 
       if ((line + 18944) % 100000 == 0)
         bar->tick();
     }
     line++;
   }
-  // populateUserHash(u_hash, play_hash, ratings, players_ids, user_ids);
 }
 
-void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
+void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, UsersHashTable *usersHashTable)
 {
   // Hide cursor
   indicators::show_console_cursor(false);
@@ -141,7 +154,7 @@ void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable)
   const clock_t begin_time = clock();
 
   parsePlayers(playersTrie, playersHashTable, &bar);
-  parseRatings(playersHashTable, &bar);
+  parseRatings(usersHashTable, playersHashTable, &bar);
   // parseTag();
 
   bar.mark_as_completed();

@@ -10,6 +10,7 @@
 #include "./interface.hpp"
 #include "./parsing.hpp"
 #include "./player.hpp"
+#include "./users.hpp"
 #include "./console.hpp"
 
 #pragma execution_character_set("utf-8")
@@ -26,11 +27,12 @@ int main()
 
   PlayersTrie playersTrie;
   PlayersHashTable playersHashTable;
+  UsersHashTable usersHashTable;
 
   Console console(&playersTrie, &playersHashTable);
 
   // // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
-  parseData(&playersTrie, &playersHashTable);
+  parseData(&playersTrie, &playersHashTable, &usersHashTable);
 
   // FASE 2 - MODO CONSOLE
   while (!console.shouldExit())
