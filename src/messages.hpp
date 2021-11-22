@@ -31,7 +31,7 @@ void helpMessage()
 
   cout << "    tags <list of tags>" << endl;
   cout << "\t- Returns the list of players associated with a set of tags" << endl;
-  cout << "\t- Example: tags 'Brazil' 'Dribble'" << endl;
+  cout << "\t- Example: tags 'Brazil' 'Dribbler'" << endl;
   cout << endl;
 
   cout << "    help" << endl;
