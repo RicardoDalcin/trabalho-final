@@ -31,12 +31,12 @@ void introduction()
        << R"(
 )" << endl;
 
-  cout << termcolor::blue;
-  cout << "\t\t\t\tClassificação e Pesquisa de Dados" << endl;
+  cout << termcolor::magenta;
+  cout << "\t\t\t    Classificação e Pesquisa de Dados" << endl;
   cout << endl;
-  cout << "\t\t\t\t         Integrantes" << endl;
-  cout << "\t\t\t\t - Bernardo Beneduzi Borba" << endl;
-  cout << "\t\t\t\t - Ricardo Hermes Dalcin" << endl;
+  cout << "\t\t\t\t Bernardo Beneduzi Borba" << endl;
+  cout << "\t\t\t\t  Ricardo Hermes Dalcin" << endl;
+  cout << endl;
 }
 
 #endif

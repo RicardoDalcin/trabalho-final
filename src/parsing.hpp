@@ -193,8 +193,6 @@ void parseData(
 {
   indicators::show_console_cursor(false);
 
-  system("cls");
-
   using namespace indicators;
 
   BlockProgressBar bar{
@@ -203,7 +201,8 @@ void parseData(
       option::FontStyles{std::vector<FontStyle>{FontStyle::bold}},
       option::MaxProgress{floor(TOTAL_DATA_SIZE / UPDATE_PROGRESS_EVERY)},
       option::Start{"[ "},
-      option::End{" ]"}};
+      option::End{" ]"},
+      option::PrefixText{"             "}};
 
   const clock_t begin_time = clock();
 
@@ -216,7 +215,8 @@ void parseData(
 
   float t = float(clock() - begin_time) / CLOCKS_PER_SEC;
 
-  cout << "Elapsed time: " << t << " seconds" << endl;
+  cout << endl
+       << "\t\t\t\tElapsed time: " << t << " seconds" << endl;
 
   indicators::show_console_cursor(true);
 
