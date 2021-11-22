@@ -65,4 +65,12 @@ void commandNotFoundMessage()
        << endl;
 }
 
+void topValueTooBigMessage(int topSize)
+{
+  cout << endl
+       << "The given argument is greater than the number of players in that position." << endl 
+       << "Printing only " << topSize << endl
+       << endl;
+}
+
 #endif
