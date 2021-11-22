@@ -68,6 +68,32 @@ void printPlayerData(Player player)
   cout << endl;
 }
 
+void printUserHeader()
+{
+  cout << endl;
+  printElement("sofifa_id", 12);
+  printElement("name", 48);
+  printElement("global_rating", 16);
+  printElement("count", 8);
+  printElement("rating", 8);
+  cout << endl;
+
+  printCharWithSize('-', 12 + 48 + 16 + 8 + 8);
+  cout << endl;
+}
+
+void printUserRates(Player player, float rate)
+{
+  printElement(player.id(), 12);
+  printElement(player.name(), 48);
+  cout << fixed << setprecision(6);
+  printElement(player.globalRating(), 16);
+  printElement(player.ratingsCount(), 8);
+  cout << fixed << setprecision(2);
+  printElement(rate, 8);
+  cout << endl;
+}
+
 bool isEmpty(string word)
 {
   regex emptyString("([ ]*)");
@@ -290,6 +316,8 @@ void Console::userCommand(string command)
     topSize = n;
   }
 
+  printUserHeader();
+
   for(int i = 0; i < topSize; i++)
   {
     int playerId = ratingsArr[n-1-i].playerId();
@@ -297,8 +325,7 @@ void Console::userCommand(string command)
     Player *player = playersHashTable_->search(playerId);
 
     if (player != NULL)
-      printPlayerData(player);
-      cout << userRate << endl;
+      printUserRates(*player, userRate);
   }
 }
 
