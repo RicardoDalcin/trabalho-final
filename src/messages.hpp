@@ -46,30 +46,37 @@ void helpMessage()
 void noDataFoundMessage()
 {
   cout << endl
-       << "No players found with given parameter" << endl
+       << "  No players found with given parameter" << endl
+       << endl;
+}
+
+void noPlayerAssociated(string tag)
+{
+  cout << endl
+       << "  There are no players associated to the tag \"" << tag << "\"" << endl
        << endl;
 }
 
 void invalidArgumentsMessage()
 {
   cout << endl
-       << "The arguments provided are invalid" << endl
+       << "  The arguments provided are invalid" << endl
        << endl;
 }
 
 void commandNotFoundMessage()
 {
   cout << endl
-       << "Command not found" << endl
-       << "Use the 'help' command for more information" << endl
+       << "  Command not found" << endl
+       << "  Use the 'help' command for more information" << endl
        << endl;
 }
 
 void topValueTooBigMessage(int topSize)
 {
   cout << endl
-       << "The given argument is greater than the number of players in that position." << endl 
-       << "Printing only " << topSize << endl
+       << "  The given argument is greater than the number of players in that position." << endl
+       << "  Printing only " << topSize << endl
        << endl;
 }
 

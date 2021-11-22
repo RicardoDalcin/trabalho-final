@@ -347,6 +347,8 @@ void Console::userCommand(string command)
     if (player != NULL)
       printUserRates(*player, userRate);
   }
+
+  cout << endl;
 }
 
 void Console::topCommand(string command)
@@ -411,6 +413,8 @@ void Console::topCommand(string command)
   {
     printPlayerData(playerArr[n - 1 - i]);
   }
+
+  cout << endl;
 }
 
 void Console::tagsCommand(string command)
@@ -443,7 +447,7 @@ void Console::tagsCommand(string command)
 
     if (searchTag == NULL)
     {
-      cout << "PLACEHOLDER TAG ERRADA";
+      noPlayerAssociated(tag);
       return;
     }
 
