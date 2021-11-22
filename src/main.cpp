@@ -35,7 +35,7 @@ int main()
 
   Console console(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable, &tagsHashTable);
 
-  // // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
+  // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
   parseData(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable, &tagsHashTable);
 
   // FASE 2 - MODO CONSOLE

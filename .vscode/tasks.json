@@ -10,6 +10,8 @@
           "${workspaceFolder}\\include\\termcolor.hpp",
           "${workspaceFolder}\\include\\parser.hpp",
           "${workspaceFolder}\\lib\\hash.hpp",
+          "${workspaceFolder}\\lib\\quicksort.hpp",
+          "${workspaceFolder}\\lib\\sorting.hpp",
           "${workspaceFolder}\\lib\\trie.hpp",
           "${workspaceFolder}\\src\\player.hpp",
           "${workspaceFolder}\\src\\positions.hpp",

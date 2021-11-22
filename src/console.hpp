@@ -7,6 +7,7 @@
 // Internal libraries
 #include "../lib/trie.hpp"
 #include "../lib/quicksort.hpp"
+#include "../lib/sorting.hpp"
 
 // Logic libraries
 #include "./messages.hpp"
@@ -166,18 +167,21 @@ string parseCommandName(string command)
   return commandOnly;
 }
 
-vector<int> intersection(vector<int> &v1,
-                         vector<int> &v2)
+vector<int> intersection(vector<int> &firstVector,
+                         vector<int> &secondVector)
 {
-  vector<int> v3;
+  vector<int> intersectionVector;
 
-  sort(v1.begin(), v1.end());
-  sort(v2.begin(), v2.end());
+  int *firstArray = &firstVector[0];
+  int *secondArray = &secondVector[0];
 
-  set_intersection(v1.begin(), v1.end(),
-                   v2.begin(), v2.end(),
-                   back_inserter(v3));
-  return v3;
+  basicQuicksort(firstArray, (int)firstVector.size());
+  basicQuicksort(secondArray, (int)secondVector.size());
+
+  set_intersection(firstVector.begin(), firstVector.end(),
+                   secondVector.begin(), secondVector.end(),
+                   back_inserter(intersectionVector));
+  return intersectionVector;
 }
 
 // CLASSE DE COMMAND
