@@ -32,7 +32,7 @@ string TAGS_DATASET_PATH = DATASETS_FOLDER_PATH + "/tags.csv";
 
 // Funções de Parse
 // parametros: PlayersTrie *playersTrie, PositionsHash *pos_hash, PlayersHash play_hash[]
-void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, indicators::BlockProgressBar *bar)
+void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, indicators::ProgressBar *bar)
 {
   ifstream f(PLAYERS_DATASET_PATH);
   CsvParser parser(f);
@@ -65,10 +65,10 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, 
 
       playersTrie->insert(name, id);
 
-      for(int i = 0; i < positions.size(); i++)
+      for (int i = 0; i < positions.size(); i++)
       {
         Position *position = positionHashTable->search(positions[i]);
-        if(position == NULL)
+        if (position == NULL)
         {
           vector<int> playerIds;
           playerIds.push_back(id);
@@ -113,7 +113,7 @@ void parseTag()
 }
 
 // Parâmetros: UserHash u_hash[], PlayersHash play_hash[]
-void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashTable, indicators::BlockProgressBar *bar)
+void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashTable, indicators::ProgressBar *bar)
 {
   ifstream f(RATING_DATASET_PATH);
   CsvParser parser(f);
@@ -154,16 +154,22 @@ void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashT
 
 void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, UsersHashTable *usersHashTable)
 {
-  // Hide cursor
   indicators::show_console_cursor(false);
 
+  system("cls");
+
   using namespace indicators;
-  BlockProgressBar bar{
+
+  ProgressBar bar{
       option::BarWidth{80},
-      option::ForegroundColor{Color::white},
-      option::FontStyles{
-          std::vector<FontStyle>{FontStyle::bold}},
-      option::MaxProgress{242}};
+      option::ForegroundColor{Color::cyan},
+      option::FontStyles{std::vector<FontStyle>{FontStyle::bold}},
+      option::MaxProgress{242},
+      option::Start{"["},
+      option::Fill{"■"},
+      option::Lead{"■"},
+      option::Remainder{" "},
+      option::End{"]"}};
 
   const clock_t begin_time = clock();
 
@@ -179,6 +185,8 @@ void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, Pos
   float t = float(clock() - begin_time) / CLOCKS_PER_SEC;
 
   cout << "Elapsed time: " << t << " seconds" << endl;
+
+  indicators::show_console_cursor(true);
 
   return;
 }
