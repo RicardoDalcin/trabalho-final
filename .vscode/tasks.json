@@ -12,9 +12,13 @@
           "${workspaceFolder}\\lib\\hash.hpp",
           "${workspaceFolder}\\lib\\trie.hpp",
           "${workspaceFolder}\\src\\player.hpp",
+          "${workspaceFolder}\\src\\positions.hpp",
+          "${workspaceFolder}\\src\\users.hpp",
+          "${workspaceFolder}\\src\\tag.hpp",
           "${workspaceFolder}\\src\\parsing.hpp",
           "${workspaceFolder}\\src\\messages.hpp",
           "${workspaceFolder}\\src\\console.hpp",
+          "${workspaceFolder}\\src\\interface.hpp",
           "${workspaceFolder}\\src\\main.cpp",
           "-o",
           "${workspaceFolder}\\bin\\app.exe"

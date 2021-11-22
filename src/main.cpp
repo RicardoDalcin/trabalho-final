@@ -12,6 +12,7 @@
 #include "./player.hpp"
 #include "./positions.hpp"
 #include "./users.hpp"
+#include "./tag.hpp"
 #include "./console.hpp"
 
 #pragma execution_character_set("utf-8")
@@ -30,11 +31,12 @@ int main()
   PlayersHashTable playersHashTable;
   PositionHashTable positionHashTable;
   UsersHashTable usersHashTable;
+  TagsHashTable tagsHashTable;
 
-  Console console(&playersTrie, &playersHashTable, &positionHashTable);
+  Console console(&playersTrie, &playersHashTable, &positionHashTable, &tagsHashTable);
 
   // // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
-  parseData(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable);
+  parseData(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable, &tagsHashTable);
 
   // FASE 2 - MODO CONSOLE
   while (!console.shouldExit())

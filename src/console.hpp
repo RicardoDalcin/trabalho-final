@@ -1,6 +1,8 @@
 // Standard libraries
 #include <bits/stdc++.h>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 // Internal libraries
 #include "../lib/trie.hpp"
@@ -9,6 +11,8 @@
 // Logic libraries
 #include "./messages.hpp"
 #include "./player.hpp"
+#include "./users.hpp"
+#include "./tag.hpp"
 #include "./positions.hpp"
 
 #ifndef console_h
@@ -125,6 +129,20 @@ string parseCommandName(string command)
   return commandOnly;
 }
 
+vector<int> intersection(vector<int> &v1,
+                         vector<int> &v2)
+{
+  vector<int> v3;
+
+  sort(v1.begin(), v1.end());
+  sort(v2.begin(), v2.end());
+
+  set_intersection(v1.begin(), v1.end(),
+                   v2.begin(), v2.end(),
+                   back_inserter(v3));
+  return v3;
+}
+
 // CLASSE DE COMMAND
 
 class Console;
@@ -165,6 +183,7 @@ private:
   PlayersTrie *playersTrie_;
   PlayersHashTable *playersHashTable_;
   PositionHashTable *positionHashTable_;
+  TagsHashTable *tagsHashTable_;
 
   void playerCommand(string command);
   void userCommand(string command);
@@ -178,19 +197,20 @@ private:
   vector<Command> commands;
 
 public:
-  Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable);
+  Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, TagsHashTable *tagsHashTable);
 
   const int shouldExit() const { return shouldExit_; }
 
   void parseCommand(string command);
 };
 
-Console::Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable)
+Console::Console(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, TagsHashTable *tagsHashTable)
 {
   shouldExit_ = false;
   playersTrie_ = playersTrie;
   playersHashTable_ = playersHashTable;
   positionHashTable_ = positionHashTable;
+  tagsHashTable_ = tagsHashTable;
 
   commands.push_back(Command("(player)(?![^ ])(.*)", playerCommand));
   commands.push_back(Command("(user)(?![^ ])(.*)", userCommand));
@@ -292,28 +312,28 @@ void Console::topCommand(string command)
   Position *positionObject = positionHashTable_->search(positionArgument);
 
   vector<int> allPlayersIds = positionObject->playerIds();
-  vector<Player*> allPlayers;
+  vector<Player *> allPlayers;
   for (auto playerId : allPlayersIds)
   {
     Player *player = playersHashTable_->search(playerId);
 
     if (player != NULL)
     {
-      if(player->ratingsCount() >= 1000)
+      if (player->ratingsCount() >= 1000)
       {
         allPlayers.push_back(player);
       }
     }
   }
 
-  Player* playerArr[allPlayers.size()];
+  Player *playerArr[allPlayers.size()];
 
   copy(allPlayers.begin(), allPlayers.end(), playerArr);
 
-  int n = sizeof(playerArr)/sizeof(playerArr[0]);
-  quickSort(playerArr, 0, n-1);
+  int n = sizeof(playerArr) / sizeof(playerArr[0]);
+  quickSort(playerArr, 0, n - 1);
 
-  if(topSize > n)
+  if (topSize > n)
   {
     topSize = n;
     topValueTooBigMessage(topSize);
@@ -323,7 +343,7 @@ void Console::topCommand(string command)
 
   for (int i = 0; i < topSize; i++)
   {
-    printPlayerData(playerArr[n-1-i]);
+    printPlayerData(playerArr[n - 1 - i]);
   }
 }
 
@@ -331,7 +351,9 @@ void Console::tagsCommand(string command)
 {
   string tagsArgument = parseArguments(command);
 
-  vector<string> positions;
+  vector<string> tags;
+
+  vector<int> associatedPlayers;
 
   if (isEmpty(tagsArgument))
   {
@@ -339,10 +361,55 @@ void Console::tagsCommand(string command)
     return;
   }
 
-  positions = splitString(tagsArgument, ' ');
+  istringstream iss(tagsArgument);
+  string token;
 
-  for (auto &position : positions)
-    position.erase(remove(position.begin(), position.end(), '\''), position.end());
+  while (iss >> quoted(token, '\''))
+    tags.push_back(token);
+
+  associatedPlayers.clear();
+
+  int i = 0;
+
+  for (auto tag : tags)
+  {
+    Tag *searchTag = tagsHashTable_->search(tag);
+
+    if (searchTag == NULL)
+    {
+      cout << "PLACEHOLDER TAG ERRADA";
+      return;
+    }
+
+    if (i == 0)
+    {
+      for (auto player : searchTag->players())
+        associatedPlayers.push_back(player);
+    }
+    else
+    {
+      vector<int> players = searchTag->players();
+      associatedPlayers = intersection(associatedPlayers, players);
+    }
+
+    i++;
+  }
+
+  if (!associatedPlayers.size())
+  {
+    noDataFoundMessage();
+    return;
+  }
+
+  printPlayerHeader();
+
+  for (auto playerId : associatedPlayers)
+  {
+    Player *player = playersHashTable_->search(playerId);
+
+    if (player != NULL)
+      printPlayerData(player);
+  }
 
   cout << endl;
 }

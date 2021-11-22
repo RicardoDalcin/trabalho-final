@@ -15,6 +15,7 @@
 // Logic libraries
 #include "./player.hpp"
 #include "./users.hpp"
+#include "./tag.hpp"
 #include "./positions.hpp"
 
 #ifndef parsing_h
@@ -142,7 +143,7 @@ void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashT
 }
 
 // Parâmetros: TagHash *t_hash
-void parseTags(indicators::BlockProgressBar *bar)
+void parseTags(TagsHashTable *tagsHashTable, indicators::BlockProgressBar *bar)
 {
   ifstream f(TAGS_DATASET_PATH);
   CsvParser parser(f);
@@ -155,9 +156,23 @@ void parseTags(indicators::BlockProgressBar *bar)
   {
     if (line)
     {
-      int userId = stoi(row[0]);
+      // int userId = stoi(row[0]);
       int playerId = stoi(row[1]);
-      string tag = row[2];
+      string name = row[2];
+
+      Tag *tag = tagsHashTable->search(name);
+
+      if (tag != NULL)
+      {
+        tag->addPlayer(playerId);
+      }
+      else
+      {
+        Tag newTag(name);
+        newTag.addPlayer(playerId);
+
+        tagsHashTable->insert(name, newTag);
+      }
 
       if ((line + PLAYERS_DATA_SIZE + RATINGS_DATA_SIZE) % UPDATE_PROGRESS_EVERY == 0)
         bar->tick();
@@ -169,7 +184,12 @@ void parseTags(indicators::BlockProgressBar *bar)
   //populateTagTrie(t_trie, tags, players_ids);
 }
 
-void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, UsersHashTable *usersHashTable)
+void parseData(
+    PlayersTrie *playersTrie,
+    PlayersHashTable *playersHashTable,
+    PositionHashTable *positionHashTable,
+    UsersHashTable *usersHashTable,
+    TagsHashTable *tagsHashTable)
 {
   indicators::show_console_cursor(false);
 
@@ -189,7 +209,7 @@ void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, Pos
 
   parsePlayers(playersTrie, playersHashTable, positionHashTable, &bar);
   parseRatings(usersHashTable, playersHashTable, &bar);
-  parseTags(&bar);
+  parseTags(tagsHashTable, &bar);
 
   bar.set_option(option::PostfixText{""});
   bar.mark_as_completed();
