@@ -21,18 +21,23 @@ using namespace std;
 
 int main()
 {
+  // arruma o encoding de output para suportar acentuacao
   SetConsoleOutputCP(65001);
 
+  // mostra a introducao
   introduction();
 
+  // espera um "enter"
   cin.get();
 
+  // instancia as estruturas de dados necessarias
   PlayersTrie playersTrie;
   PlayersHashTable playersHashTable;
   PositionHashTable positionHashTable;
   UsersHashTable usersHashTable;
   TagsHashTable tagsHashTable;
 
+  // instancia o console passando as referencias para as estruturas
   Console console(&playersTrie, &playersHashTable, &positionHashTable, &usersHashTable, &tagsHashTable);
 
   // FASE 1 - CONSTRUCAO DAS ESTRUTURAS
@@ -43,9 +48,11 @@ int main()
   {
     string command;
 
+    // pega o comando via input do usuario
     cout << "> ";
     getline(cin, command);
 
+    // faz o parse do comando na classe Console
     console.parseCommand(command);
   }
 
