@@ -13,21 +13,30 @@ using namespace std;
 void introduction()
 {
   system("cls");
-  cout << termcolor::cyan << R"(
-      _______.  ______    _______  __   _______    ___      
-    /       | /  __  \  |   ____||  | |   ____|  /   \     
-   |   (----`|  |  |  | |  |__   |  | |  |__    /  ^  \    
-    \   \    |  |  |  | |   __|  |  | |   __|  /  /_\  \   
-.----)   |   |  `--'  | |  |     |  | |  |    /  _____  \  
-|_______/     \______/  |__|     |__| |__|   /__/     \__\ 
-                                                           
+
+  cout << termcolor::bright_cyan << R"(
+                     _______.  ______    _______  __   _______    ___      )"
+       << R"(
+                    /       | /  __  \  |   ____||  | |   ____|  /   \     )"
+       << R"(
+                   |   (----`|  |  |  | |  |__   |  | |  |__    /  ^  \    )"
+       << R"(
+                    \   \    |  |  |  | |   __|  |  | |   __|  /  /_\  \   )"
+       << R"(
+                .----)   |   |  `--'  | |  |     |  | |  |    /  _____  \  )"
+       << R"(
+                |_______/     \______/  |__|     |__| |__|   /__/     \__\ )"
+       << R"(
+                                                                           )"
+       << R"(
 )" << endl;
 
-  cout << "\t\tClassificação e Pesquisa de Dados" << endl;
+  cout << termcolor::blue;
+  cout << "\t\t\t\tClassificação e Pesquisa de Dados" << endl;
   cout << endl;
-  cout << "\t\tIntegrantes:" << endl;
-  cout << "\t\t  - Bernardo Beneduzi Borba" << endl;
-  cout << "\t\t  - Ricardo Hermes Dalcin" << endl;
+  cout << "\t\t\t\t         Integrantes" << endl;
+  cout << "\t\t\t\t - Bernardo Beneduzi Borba" << endl;
+  cout << "\t\t\t\t - Ricardo Hermes Dalcin" << endl;
 }
 
 #endif

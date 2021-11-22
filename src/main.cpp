@@ -22,9 +22,9 @@ int main()
 {
   SetConsoleOutputCP(65001);
 
-  // introduction();
+  introduction();
 
-  // Sleep(5000);
+  cin.get();
 
   PlayersTrie playersTrie;
   PlayersHashTable playersHashTable;

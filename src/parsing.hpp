@@ -30,6 +30,14 @@ string PLAYERS_DATASET_PATH = DATASETS_FOLDER_PATH + "/players.csv";
 string RATING_DATASET_PATH = DATASETS_FOLDER_PATH + "/rating.csv";
 string TAGS_DATASET_PATH = DATASETS_FOLDER_PATH + "/tags.csv";
 
+const int PLAYERS_DATA_SIZE = 18944;
+const int TAGS_DATA_SIZE = 364950;
+const int RATINGS_DATA_SIZE = 24188078;
+
+const int TOTAL_DATA_SIZE = PLAYERS_DATA_SIZE + TAGS_DATA_SIZE + RATINGS_DATA_SIZE;
+
+const int UPDATE_PROGRESS_EVERY = 100000;
+
 // Funções de Parse
 // parametros: PlayersTrie *playersTrie, PositionsHash *pos_hash, PlayersHash play_hash[]
 void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, indicators::BlockProgressBar *bar)
@@ -38,6 +46,8 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, 
   CsvParser parser(f);
 
   int line = 0;
+
+  bar->set_option(indicators::option::PostfixText{"Loading players 1/3"});
 
   for (auto &row : parser)
   {
@@ -65,10 +75,10 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, 
 
       playersTrie->insert(name, id);
 
-      for(int i = 0; i < positions.size(); i++)
+      for (int i = 0; i < positions.size(); i++)
       {
         Position *position = positionHashTable->search(positions[i]);
-        if(position == NULL)
+        if (position == NULL)
         {
           vector<int> playerIds;
           playerIds.push_back(id);
@@ -81,35 +91,12 @@ void parsePlayers(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, 
         }
       }
 
-      if (line % 100000 == 0)
+      if (line % UPDATE_PROGRESS_EVERY == 0)
         bar->tick();
     }
 
     line++;
   }
-}
-
-// Parâmetros: TagHash *t_hash
-void parseTag()
-{
-  ifstream f(TAGS_DATASET_PATH);
-  CsvParser parser(f);
-
-  int line = 0;
-
-  for (auto &row : parser)
-  {
-    if (line)
-    {
-      int userId = stoi(row[0]);
-      int playerId = stoi(row[1]);
-      string tag = row[2];
-    }
-
-    line++;
-  }
-
-  //populateTagTrie(t_trie, tags, players_ids);
 }
 
 // Parâmetros: UserHash u_hash[], PlayersHash play_hash[]
@@ -119,6 +106,8 @@ void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashT
   CsvParser parser(f);
 
   int line = 0;
+
+  bar->set_option(indicators::option::PostfixText{"Loading ratings 2/3"});
 
   for (auto &row : parser)
   {
@@ -145,40 +134,75 @@ void parseRatings(UsersHashTable *usersHashTable, PlayersHashTable *playersHashT
         user->addRating(newRate);
       }
 
-      if ((line + 18944) % 100000 == 0)
+      if ((line + PLAYERS_DATA_SIZE) % UPDATE_PROGRESS_EVERY == 0)
         bar->tick();
     }
     line++;
   }
 }
 
+// Parâmetros: TagHash *t_hash
+void parseTags(indicators::BlockProgressBar *bar)
+{
+  ifstream f(TAGS_DATASET_PATH);
+  CsvParser parser(f);
+
+  int line = 0;
+
+  bar->set_option(indicators::option::PostfixText{"Loading tags 3/3"});
+
+  for (auto &row : parser)
+  {
+    if (line)
+    {
+      int userId = stoi(row[0]);
+      int playerId = stoi(row[1]);
+      string tag = row[2];
+
+      if ((line + PLAYERS_DATA_SIZE + RATINGS_DATA_SIZE) % UPDATE_PROGRESS_EVERY == 0)
+        bar->tick();
+    }
+
+    line++;
+  }
+
+  //populateTagTrie(t_trie, tags, players_ids);
+}
+
 void parseData(PlayersTrie *playersTrie, PlayersHashTable *playersHashTable, PositionHashTable *positionHashTable, UsersHashTable *usersHashTable)
 {
-  // Hide cursor
   indicators::show_console_cursor(false);
 
+  system("cls");
+
   using namespace indicators;
+
   BlockProgressBar bar{
-      option::BarWidth{80},
+      option::BarWidth{60},
       option::ForegroundColor{Color::white},
-      option::FontStyles{
-          std::vector<FontStyle>{FontStyle::bold}},
-      option::MaxProgress{242}};
+      option::FontStyles{std::vector<FontStyle>{FontStyle::bold}},
+      option::MaxProgress{floor(TOTAL_DATA_SIZE / UPDATE_PROGRESS_EVERY)},
+      option::Start{"[ "},
+      option::End{" ]"}};
 
   const clock_t begin_time = clock();
 
   parsePlayers(playersTrie, playersHashTable, positionHashTable, &bar);
   parseRatings(usersHashTable, playersHashTable, &bar);
-  parseTag();
+  parseTags(&bar);
 
+  bar.set_option(option::PostfixText{""});
   bar.mark_as_completed();
-
-  // // Show cursor
-  // indicators::show_console_cursor(true);
 
   float t = float(clock() - begin_time) / CLOCKS_PER_SEC;
 
   cout << "Elapsed time: " << t << " seconds" << endl;
+
+  indicators::show_console_cursor(true);
+
+  cin.get();
+
+  system("cls");
 
   return;
 }
