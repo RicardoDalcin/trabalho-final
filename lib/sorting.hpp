@@ -1,10 +1,14 @@
 #include <bits/stdc++.h>
 
+#ifndef sorting_h
+#define sorting_h
+
 using namespace std;
 
-//--------------------------------------------------------------
+// Funcoes basicas para um quicksort de inteiros
+// usado para a funcao de interseccao de vetores
+
 void copyArray(int source[], int destination[], int size)
-//--------------------------------------------------------------
 {
   int i;
 
@@ -14,9 +18,7 @@ void copyArray(int source[], int destination[], int size)
   }
 }
 
-//--------------------------------------------------------------
 int partition(int arr[], int low, int high)
-//--------------------------------------------------------------
 {
   int key = arr[low];
   bool left = true;
@@ -62,9 +64,7 @@ int partition(int arr[], int low, int high)
   return index;
 }
 
-//--------------------------------------------------------------
 int medianPartition(int arr[], int low, int high)
-//--------------------------------------------------------------
 {
   int half_index = floor((low + high) / 2);
 
@@ -88,9 +88,7 @@ int medianPartition(int arr[], int low, int high)
   return partition(arr, low, high);
 }
 
-//--------------------------------------------------------------
 void innerBasicQuicksort(int arr[], int low, int high)
-//--------------------------------------------------------------
 {
   if (low < high)
   {
@@ -105,3 +103,5 @@ void basicQuicksort(int arr[], int size)
 {
   innerBasicQuicksort(arr, 0, size - 1);
 }
+
+#endif

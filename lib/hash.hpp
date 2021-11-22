@@ -14,6 +14,10 @@ struct entry
   struct entry<T, TKey> *nextEntry;
 };
 
+// Define uma classe de HashTable generica,
+// que recebe a classe dos dados T e o tipo da chave TKey.
+// Por conta da chave ter tipo generico, a hash function eh passada
+// por parametro no constructor em vez de implementada na classe.
 template <class T, typename TKey>
 class HashTable
 {
@@ -29,6 +33,7 @@ public:
   HashTable(int tableSize, int (*_hashFunction)(TKey, int));
 };
 
+// Constructor recebe o tamanho da hash table e o callback da hash function
 template <class T, typename TKey>
 HashTable<T, TKey>::HashTable(int tableSize, int (*_hashFunction)(TKey, int))
 {

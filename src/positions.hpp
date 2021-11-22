@@ -9,6 +9,8 @@
 using namespace std;
 
 // CLASSE Position
+// Guarda o nome da posicao e a lista de jogadores associados a ela
+// Implementa a logica de adicionar um novo jogador na lista
 
 class Position
 {
@@ -34,7 +36,7 @@ Position::Position(string position, vector<int> playerIds)
 
 Position::Position()
 {
-    position_ = "";
+  position_ = "";
 }
 
 void Position::addPlayer(int playerId)
@@ -43,16 +45,19 @@ void Position::addPlayer(int playerId)
 }
 
 // CLASSE DE HASH TABLE DAS POSITIONS
+// Lida com a logica de hash table especifica das posicoes
+// Define os tipos para a hash table generica e "exporta" as funcoes de insert e search
+// Tambem define a hashing function e o tamanho da hash table
 
 int positionHashingFunction(string key, int size)
 {
-    int sum = 0;
-    for(int i = 0; i < key.size(); i++)
-    {
-      sum += key[i];
-    }
+  int sum = 0;
+  for (int i = 0; i < key.size(); i++)
+  {
+    sum += key[i];
+  }
 
-    return (sum + 1) % size;
+  return (sum + 1) % size;
 }
 
 class PositionHashTable

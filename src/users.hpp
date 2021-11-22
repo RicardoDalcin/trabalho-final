@@ -9,18 +9,20 @@
 using namespace std;
 
 // CLASSE RATING
+// Guarda a avaliacao e o id do jogador avaliado
+
 class Rating
 {
 private:
-    float rate_;
-    int player_id_;
+  float rate_;
+  int player_id_;
 
 public:
-    Rating(float rate, int id);
-    Rating();
+  Rating(float rate, int id);
+  Rating();
 
-    const float rate() const { return rate_; }
-    const int playerId() const { return player_id_; }
+  const float rate() const { return rate_; }
+  const int playerId() const { return player_id_; }
 };
 
 Rating::Rating(float rate, int id)
@@ -36,6 +38,8 @@ Rating::Rating()
 }
 
 // CLASSE USER
+// Guarda o id do usuario e a lista de avaliacoes associadas a ele
+// Lida com a logica de adicionar uma nova avaliacao
 
 class User
 {
@@ -70,6 +74,9 @@ void User::addRating(Rating newRate)
 }
 
 // CLASSE DE HASH TABLE DOS USERS
+// Lida com a logica de hash table especifica dos usuarios
+// Define os tipos para a hash table generica e "exporta" as funcoes de insert e search
+// Tambem define a hashing function e o tamanho da hash table
 
 int userHashingFunction(int key, int size)
 {

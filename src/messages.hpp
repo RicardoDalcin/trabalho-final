@@ -64,6 +64,20 @@ void invalidArgumentsMessage()
        << endl;
 }
 
+void userNotFound()
+{
+  cout << endl
+       << "  There is no user with the provided ID" << endl
+       << endl;
+}
+
+void positionNotFound()
+{
+  cout << endl
+       << "  The provided position does not exist" << endl
+       << endl;
+}
+
 void commandNotFoundMessage()
 {
   cout << endl

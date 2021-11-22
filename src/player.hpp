@@ -9,6 +9,8 @@
 using namespace std;
 
 // CLASSE PLAYER
+// Guarda as informacoes principais do jogador (nome, id, posicoes, avaliacao total e quantidade de avaliacoes)
+// Lida com a logica de avaliacoes (adiciona avaliacao e calcula media global)
 
 class Player
 {
@@ -81,6 +83,9 @@ float Player::globalRating()
 }
 
 // CLASSE DE HASH TABLE DOS PLAYERS
+// Lida com a logica de hash table especifica dos jogadores
+// Define os tipos para a hash table generica e "exporta" as funcoes de insert e search
+// Tambem define a hashing function e o tamanho da hash table
 
 int playerHashingFunction(int key, int size)
 {

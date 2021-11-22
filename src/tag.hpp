@@ -9,6 +9,8 @@
 using namespace std;
 
 // CLASSE TAG
+// Guarda o nome da tag e os jogadores associados a ela
+// Lida com a logica de adicionar um jogador novo na lista (pulando duplicatas)
 
 class Tag
 {
@@ -44,7 +46,10 @@ void Tag::addPlayer(int player)
     playerIds_.push_back(player);
 }
 
-// CLASSE DE HASH TABLE DOS TagS
+// CLASSE DE HASH TABLE DOS TAGS
+// Lida com a logica de hash table especifica das tags
+// Define os tipos para a hash table generica e "exporta" as funcoes de insert e search
+// Tambem define a hashing function e o tamanho da hash table
 
 int TagHashingFunction(string key, int size)
 {

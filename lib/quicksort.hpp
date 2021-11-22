@@ -1,22 +1,25 @@
-#include<stdio.h>
+#include <stdio.h>
 #include "../src/player.hpp"
 #include "../src/users.hpp"
 
+#ifndef quicksort_h
+#define quicksort_h
+
 // Quicksort to sort Players
-void swapPlayers(Player* a, Player* b)
+void swapPlayers(Player *a, Player *b)
 {
     Player t = *a;
     *a = *b;
     *b = t;
 }
- 
-float partitionPlayers (Player arr[], int low, int high)
+
+float partitionPlayers(Player arr[], int low, int high)
 {
     Player pivotPlayer = arr[high];
-    float pivot = pivotPlayer.globalRating();    // pivot
-    int i = (low - 1);  // Index of smaller element
- 
-    for (int j = low; j <= high- 1; j++)
+    float pivot = pivotPlayer.globalRating(); // pivot
+    int i = (low - 1);                        // Index of smaller element
+
+    for (int j = low; j <= high - 1; j++)
     {
         Player player = arr[j];
         if (player.globalRating() <= pivot)
@@ -28,7 +31,7 @@ float partitionPlayers (Player arr[], int low, int high)
     swapPlayers(&arr[i + 1], &arr[high]);
     return (i + 1);
 }
- 
+
 void quickSortPlayers(Player arr[], int low, int high)
 {
     if (low < high)
@@ -40,20 +43,20 @@ void quickSortPlayers(Player arr[], int low, int high)
 }
 
 // Quicksort to sort User Ratings
-void swapRatings(Rating* a, Rating* b)
+void swapRatings(Rating *a, Rating *b)
 {
     Rating t = *a;
     *a = *b;
     *b = t;
 }
- 
-float partitionRatings (Rating arr[], int low, int high)
+
+float partitionRatings(Rating arr[], int low, int high)
 {
     Rating pivotRating = arr[high];
-    float pivot = pivotRating.rate();    // pivot
-    int i = (low - 1);  // Index of smaller element
- 
-    for (int j = low; j <= high- 1; j++)
+    float pivot = pivotRating.rate(); // pivot
+    int i = (low - 1);                // Index of smaller element
+
+    for (int j = low; j <= high - 1; j++)
     {
         Rating Rating = arr[j];
         if (Rating.rate() <= pivot)
@@ -65,7 +68,7 @@ float partitionRatings (Rating arr[], int low, int high)
     swapRatings(&arr[i + 1], &arr[high]);
     return (i + 1);
 }
- 
+
 void quickSortRatings(Rating arr[], int low, int high)
 {
     if (low < high)
@@ -75,3 +78,5 @@ void quickSortRatings(Rating arr[], int low, int high)
         quickSortRatings(arr, pi + 1, high);
     }
 }
+
+#endif
